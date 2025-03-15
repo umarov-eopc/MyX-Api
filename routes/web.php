@@ -10,5 +10,6 @@ Route::get('/', function () {
 
 Route::middleware(['api'])->prefix('api')->group(function () {
     Route::post('/register', [AuthController::class, 'register'])->withoutMiddleware([VerifyCsrfToken::class]);
+    Route::post('/login', [AuthController::class, 'login'])->withoutMiddleware([VerifyCsrfToken::class]);
     Route::middleware('auth:sanctum')->get('/user', [AuthController::class, 'user']);
 });
