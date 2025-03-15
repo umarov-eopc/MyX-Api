@@ -38,6 +38,26 @@ class AuthController extends Controller
         ], 201);
     }
 
+    final function login(Request $request): JsonResponse
+    {
+        $credentials = $request->only('username', 'password');
+
+        if (auth()->attempt($credentials)) {
+            $user = auth()->user();
+            $token = $user->createToken('auth_token')->accessToken;
+
+            return response()->json([
+                'user' => new UserResource($user),
+                'token' => $token,
+                'message' => 'User logged in successfully'
+            ], 200);
+        }
+
+        return response()->json([
+            'message' => 'Invalid credentials'
+        ], 401);
+    }
+
     final function user(Request $request): UserResource
     {
         return new UserResource($request->user());
