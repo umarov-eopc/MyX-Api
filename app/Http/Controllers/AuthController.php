@@ -9,7 +9,7 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Intervention\Image\Image;
+use Imagick;
 
 class AuthController extends Controller
 {
@@ -18,14 +18,19 @@ class AuthController extends Controller
         $data = $request->validated();
         if ($request->hasFile('profile_photo')) {
             $path = $request->file('profile_photo')->store('profile-photos', 'public');
+            $imagePath = storage_path('app/public/' . $path);
 
-            $image = Image::read(storage_path('app/public/' . $path));
-            $image->cover(300, 300);
-            $image->save();
+            $imagick = new Imagick($imagePath);
+
+            $imagick->resizeImage(300, 300, Imagick::FILTER_LANCZOS, 1);
+
+            $imagick->writeImage($imagePath);
+            $imagick->clear();
+            $imagick->destroy();
 
             $data['profile_photo'] = $path;
-
         }
+
         $data['password'] = Hash::make($data['password']);
 
         $user = User::create($data);
