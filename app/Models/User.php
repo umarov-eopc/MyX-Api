@@ -5,9 +5,11 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+
 
 class User extends Authenticatable
 {
@@ -30,12 +32,12 @@ class User extends Authenticatable
         return $this->hasMany(Post::class);
     }
 
-    public function likes()
+    final function likes(): HasMany
     {
         return $this->hasMany(Like::class);
     }
 
-    public function likedPosts()
+    final function likedPosts(): MorphToMany
     {
         return $this->morphedByMany(Post::class, 'likeable', 'likes');
     }
