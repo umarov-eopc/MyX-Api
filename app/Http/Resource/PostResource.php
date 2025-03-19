@@ -2,7 +2,6 @@
 
 namespace App\Http\Resource;
 
-use App\Http\Resources\CommentResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PostResource extends JsonResource
@@ -13,7 +12,9 @@ class PostResource extends JsonResource
             'id' => $this->id,
             'content' => $this->content,
             'photo' => $this->photo ? url('storage/' . $this->photo) : null,
+            'likes_count' => $this->likes()->count(),
             'comments_count' => $this->comments()->count(),
+            'is_liked' => $this->isLikedBy(auth()->user()),
             'user' => new UserResource($this->whenLoaded('user')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

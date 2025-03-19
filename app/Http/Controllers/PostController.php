@@ -102,10 +102,24 @@ class PostController extends Controller
         return response()->json(['message' => 'Post deleted successfully']);
     }
 
-    public function userPosts()
+    final function userPosts(): AnonymousResourceCollection
     {
         $posts = Post::with(['user', 'comments', 'comments.user'])
             ->where('user_id', auth()->id())
+            ->latest()
+            ->paginate(10);
+
+        return PostResource::collection($posts);
+    }
+
+    final function likedPosts(): AnonymousResourceCollection
+    {
+        $likedPosts = auth()->user()->likes()
+            ->where('likeable_type', Post::class)
+            ->pluck('likeable_id');
+
+        $posts = Post::with(['user', 'comments', 'comments.user'])
+            ->whereIn('id', $likedPosts)
             ->latest()
             ->paginate(10);
 
