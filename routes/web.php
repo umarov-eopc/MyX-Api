@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
@@ -13,5 +14,12 @@ Route::prefix('api')->group(function () {
         Route::get('/posts', [PostController::class, 'index']);
         Route::post('/posts', [PostController::class, 'store']);
         Route::get('/posts/{post}', [PostController::class, 'show']);
+        Route::put('/posts/{post}', [PostController::class, 'update']);
+        Route::delete('/posts/{post}', [PostController::class, 'destroy']);
+        Route::get('/user/posts', [PostController::class, 'userPosts']);
+
+        Route::get('/posts/{post}/comments', [CommentController::class, 'index']);
+        Route::post('/comments', [CommentController::class, 'store']);
+        Route::delete('/comments/{comment}', [CommentController::class, 'destroy']);
     });
 });
