@@ -13,6 +13,7 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'username' => $this->username,
             'profile_photo' => $this->profile_photo ? asset('storage/' . $this->profile_photo) : null,
+            'post' => PostResource::collection($this->whenLoaded('posts')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

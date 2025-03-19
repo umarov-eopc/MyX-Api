@@ -66,6 +66,9 @@ class AuthController extends Controller
 
     final function user(Request $request): UserResource
     {
-        return new UserResource($request->user());
+        $user = auth()->user();
+        $user->load(['posts']);
+
+        return new UserResource($user);
     }
 }

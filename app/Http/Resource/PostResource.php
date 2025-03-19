@@ -12,7 +12,7 @@ class PostResource extends JsonResource
             'id' => $this->id,
             'content' => $this->content,
             'photo' => $this->photo ? url('storage/' . $this->photo) : null,
-            'user' => new UserResource($this->user),
+            'user' => new UserResource($this->whenLoaded('user')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
