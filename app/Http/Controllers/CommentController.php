@@ -18,7 +18,7 @@ class CommentController extends Controller
         return CommentResource::collection($comments);
     }
 
-    final function store(StoreCommentRequest $request): CommentResource
+    final function store(StoreCommentRequest $request): JsonResponse
     {
         $data = $request->validated();
         $data['user_id'] = auth()->id();
@@ -26,7 +26,7 @@ class CommentController extends Controller
         $comment = Comment::create($data);
         $comment->load('user');
 
-        return new CommentResource($comment);
+        return response()->json(new CommentResource($comment), 201);
     }
 
     final function destroy(Comment $comment): JsonResponse

@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Hash;
 use Imagick;
 
 class AuthController extends Controller
-
 {
     final function register(RegisterRequest $request): JsonResponse
     {
