@@ -68,17 +68,12 @@ class PostController extends Controller
             }
 
             $path = $request->file('photo')->store('post-photos', 'public');
-
-            $imagePath = storage_path('app/public/' . $path);
-            $imagick = new Imagick($imagePath);
-
-            $imagick->resizeImage(1200, 1200, Imagick::FILTER_LANCZOS, 1);
-
-            $imagick->writeImage($imagePath);
-            $imagick->clear();
-            $imagick->destroy();
-
             $data['photo'] = $path;
+        } elseif ($request->input('photo') === null) {
+            if ($post->photo) {
+                Storage::disk('public')->delete($post->photo);
+            }
+            $data['photo'] = null;
         }
 
         $post->update($data);
